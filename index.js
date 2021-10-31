@@ -19,13 +19,6 @@ app.post('/login', (req, res) => {
     res.json({
       token
     })
-    // res.send(
-    //   `<h3>See posts</h3>
-    //   <form action="/posts" method="post">
-    //     <input type="text" name="token" value="${token}"/>
-    //     <button type="submit">Go</button>
-    //   </form>`
-    // );
   });
 });
 
