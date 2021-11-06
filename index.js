@@ -3,9 +3,9 @@ const jwt = require('jsonwebtoken');
 const path = require('path');
 const cookieParser = require('cookie-parser')
 const app = express();
+const { SECRET_KEY, PORT = 3000 } = process.env;
 app.use(express.urlencoded());
 app.use(cookieParser());
-const port = 3000;
 
 app.get('/', (req , res) => {
   res.sendFile(__dirname + '/login.html');
@@ -15,7 +15,7 @@ app.post('/login', (req, res) => {
   const mockUser = { id: 1, name: 'Roland' };
   const user = Object.keys(req.body).length ? {...req.body} : {...mockUser};
   // create token and store it in local storage
-  jwt.sign({ user }, 'secretkey', { expiresIn: '60s' }, (err, token) => {
+  jwt.sign({ user }, SECRET_KEY, { expiresIn: '60s' }, (err, token) => {
     res.json({
       token
     })
@@ -34,8 +34,8 @@ const verifyToken = (req, res, next) => {
   }
 }
 
-app.post('/posts', verifyToken, (req , res) => {
-  jwt.verify(req.token, 'secretkey', (err, data) => {
+app.post('/posts', verifyToken, (req, res) => {
+  jwt.verify(req.token, SECRET_KEY, (err, data) => {
     if (err) {
       res.sendStatus(403); // forbidden
     } else {
@@ -47,6 +47,6 @@ app.post('/posts', verifyToken, (req , res) => {
   })
 });
 
-app.listen(port, () => {
-  console.log('Listening on port', port);
+app.listen(PORT, () => {
+  console.log('Listening on port', PORT);
 });
